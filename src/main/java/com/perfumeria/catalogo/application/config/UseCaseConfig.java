@@ -3,6 +3,8 @@ package com.perfumeria.catalogo.application.config;
 import com.perfumeria.catalogo.domain.model.gateway.CarritoGateway;
 import com.perfumeria.catalogo.domain.model.gateway.ProductoGateway;
 import com.perfumeria.catalogo.domain.model.gateway.UsuarioGateway;
+import com.perfumeria.catalogo.domain.usecase.CarritoUseCase;
+import com.perfumeria.catalogo.domain.usecase.ProductoUseCase;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 

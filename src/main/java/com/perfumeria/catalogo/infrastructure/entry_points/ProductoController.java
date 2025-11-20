@@ -1,6 +1,7 @@
 package com.perfumeria.catalogo.infrastructure.entry_points;
 
 import com.perfumeria.catalogo.domain.model.Producto;
+import com.perfumeria.catalogo.domain.usecase.ProductoUseCase;
 import com.perfumeria.catalogo.infrastructure.entry_points.dto.*;
 import com.perfumeria.catalogo.infrastructure.mapper.ProductoMapper;
 import jakarta.validation.Valid;

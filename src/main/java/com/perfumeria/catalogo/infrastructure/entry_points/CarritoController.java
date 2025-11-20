@@ -2,6 +2,7 @@ package com.perfumeria.catalogo.infrastructure.entry_points;
 
 import com.perfumeria.catalogo.domain.model.Carrito;
 import com.perfumeria.catalogo.domain.model.ItemCarrito;
+import com.perfumeria.catalogo.domain.usecase.CarritoUseCase;
 import com.perfumeria.catalogo.infrastructure.entry_points.dto.CarritoResponseDTO;
 import com.perfumeria.catalogo.infrastructure.entry_points.dto.ItemCarritoRequestDTO;
 import com.perfumeria.catalogo.infrastructure.entry_points.dto.ResponseDTO;
