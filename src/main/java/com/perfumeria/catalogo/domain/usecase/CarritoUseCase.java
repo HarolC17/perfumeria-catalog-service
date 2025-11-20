@@ -4,6 +4,7 @@ import com.perfumeria.catalogo.domain.exception.*;
 import com.perfumeria.catalogo.domain.model.Carrito;
 import com.perfumeria.catalogo.domain.model.ItemCarrito;
 import com.perfumeria.catalogo.domain.model.Producto;
+import com.perfumeria.catalogo.domain.model.UserInfo;
 import com.perfumeria.catalogo.domain.model.gateway.CarritoGateway;
 import com.perfumeria.catalogo.domain.model.gateway.UsuarioGateway;
 import lombok.RequiredArgsConstructor;
@@ -26,9 +27,8 @@ public class CarritoUseCase {
 
     public Carrito agregarProductoAlCarrito(Long usuarioId, ItemCarrito itemCarrito) {
 
-        if (!usuarioGateway.usuarioExiste(usuarioId)) {
-            throw new UsuarioNoEncontradoException("Usuario no encontrado con ID: " + usuarioId);
-        }
+        // ✅ Obtener usuario (lanza excepción si no existe)
+        UserInfo usuario = usuarioGateway.obtenerUsuario(usuarioId);
 
         if (itemCarrito.getCantidad() == null || itemCarrito.getCantidad() <= 0) {
             throw new CantidadInvalidaException("La cantidad debe ser mayor a 0");
@@ -78,9 +78,8 @@ public class CarritoUseCase {
     }
 
     public void vaciarCarrito(Long usuarioId) {
-        if (!usuarioGateway.usuarioExiste(usuarioId)) {
-            throw new UsuarioNoEncontradoException("Usuario no encontrado con ID: " + usuarioId);
-        }
+        // ✅ Obtener usuario (lanza excepción si no existe)
+        UserInfo usuario = usuarioGateway.obtenerUsuario(usuarioId);
 
         Carrito carrito = carritoGateway.buscarPorUsuarioId(usuarioId);
         if (carrito == null) {
@@ -97,9 +96,8 @@ public class CarritoUseCase {
     }
 
     public Carrito eliminarProductoDelCarrito(Long usuarioId, Long productoId) {
-        if (!usuarioGateway.usuarioExiste(usuarioId)) {
-            throw new UsuarioNoEncontradoException("Usuario no encontrado con ID: " + usuarioId);
-        }
+        // ✅ Obtener usuario (lanza excepción si no existe)
+        UserInfo usuario = usuarioGateway.obtenerUsuario(usuarioId);
 
         Carrito carrito = carritoGateway.buscarPorUsuarioId(usuarioId);
         if (carrito == null) {
@@ -143,9 +141,8 @@ public class CarritoUseCase {
     /** Valida usuario, existencia del carrito y stock disponible */
     private Carrito validarCarritoParaVenta(Long usuarioId) {
 
-        if (!usuarioGateway.usuarioExiste(usuarioId)) {
-            throw new UsuarioNoEncontradoException("Usuario no encontrado con ID: " + usuarioId);
-        }
+        // ✅ Obtener usuario (lanza excepción si no existe)
+        UserInfo usuario = usuarioGateway.obtenerUsuario(usuarioId);
 
         Carrito carrito = carritoGateway.buscarPorUsuarioId(usuarioId);
         if (carrito == null) {
@@ -163,7 +160,7 @@ public class CarritoUseCase {
                 });
 
         if (stockInsuficiente) {
-            throw new StockInsuficienteException("No hay suficiente stock");
+            throw new StockInsuficienteException("Stock insuficiente para uno o más productos");
         }
 
         return carrito;

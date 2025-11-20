@@ -14,9 +14,10 @@ import java.util.stream.Collectors;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
-    // ==========================
-    // EXCEPCIONES DE USUARIO -> 200 OK
-    // ==========================
+
+    // =============================
+    // 400 - BAD REQUEST (Validaciones)
+    // =============================
     @ExceptionHandler({
             CampoInvalidoException.class,
             IdProductoInvalidoException.class,
@@ -24,24 +25,12 @@ public class GlobalExceptionHandler {
             NombreProductoInvalidoException.class,
             PaginacionInvalidaException.class,
             PrecioInvalidoException.class,
-            ProductoNoEncontradoException.class,
-            ProductoNuloException.class,
             StockInvalidoException.class,
             TipoInvalidoException.class,
-            CarritoNoEncontradoException.class,
             CarritoVacioException.class,
-            UsuarioNoEncontradoException.class
+            CantidadInvalidaException.class,
+            StockInsuficienteException.class
     })
-    public ResponseEntity<ResponseDTO> handleUserErrors(RuntimeException ex) {
-        ResponseDTO response = new ResponseDTO(
-                LocalDateTime.now(),
-                HttpStatus.OK.value(),
-                ex.getMessage()
-        );
-        return new ResponseEntity<>(response, HttpStatus.OK);
-    }
-
-    @ExceptionHandler({StockInsuficienteException.class, CantidadInvalidaException.class})
     public ResponseEntity<ResponseDTO> handleBadRequest(RuntimeException ex) {
         ResponseDTO response = new ResponseDTO(
                 LocalDateTime.now(),
@@ -51,12 +40,29 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
-    // ==========================
-    // VALIDACIONES DE BEAN (Jakarta/Spring Validation) -> también 200 OK (según política)
-    // ==========================
+    // =============================
+    // 404 - NOT FOUND
+    // =============================
+    @ExceptionHandler({
+            UsuarioNoEncontradoException.class,
+            ProductoNoEncontradoException.class,
+            CarritoNoEncontradoException.class,
+            ProductoNuloException.class
+    })
+    public ResponseEntity<ResponseDTO> handleNotFound(RuntimeException ex) {
+        ResponseDTO response = new ResponseDTO(
+                LocalDateTime.now(),
+                HttpStatus.NOT_FOUND.value(),
+                ex.getMessage()
+        );
+        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+    }
+
+    // =============================
+    // 400 - Bean Validation
+    // =============================
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ResponseDTO> handleValidationException(MethodArgumentNotValidException ex) {
-        // Concatenar mensajes de campo en una sola cadena (puedes cambiar el formato si prefieres JSON con detalles)
         String mensajes = ex.getBindingResult()
                 .getFieldErrors()
                 .stream()
@@ -65,20 +71,20 @@ public class GlobalExceptionHandler {
 
         ResponseDTO response = new ResponseDTO(
                 LocalDateTime.now(),
-                HttpStatus.OK.value(),
+                HttpStatus.BAD_REQUEST.value(),
                 mensajes
         );
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
-    // ==========================
-    // EXCEPCIONES DE INFRAESTRUCTURA / PERSISTENCIA -> 500 INTERNAL SERVER ERROR
-    // ==========================
+    // =============================
+    // 500 - INTERNAL SERVER ERROR
+    // =============================
     @ExceptionHandler({
             ProductoPersistenciaException.class,
             CarritoPersistenciaException.class
     })
-    public ResponseEntity<ResponseDTO> handlePersistencia(ProductoPersistenciaException ex) {
+    public ResponseEntity<ResponseDTO> handlePersistencia(RuntimeException ex) {
         ResponseDTO response = new ResponseDTO(
                 LocalDateTime.now(),
                 HttpStatus.INTERNAL_SERVER_ERROR.value(),
@@ -87,12 +93,11 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    // ==========================
-    // EXCEPCIÓN GENERAL (fallback) -> 500 INTERNAL SERVER ERROR
-    // ==========================
+    // =============================
+    // 500 - Excepción General
+    // =============================
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ResponseDTO> handleGeneral(Exception ex) {
-        // Aquí es buena idea loguear el stacktrace en producción (logger.error(...))
         ResponseDTO response = new ResponseDTO(
                 LocalDateTime.now(),
                 HttpStatus.INTERNAL_SERVER_ERROR.value(),

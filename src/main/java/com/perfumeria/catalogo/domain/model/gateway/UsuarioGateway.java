@@ -1,6 +1,8 @@
 package com.perfumeria.catalogo.domain.model.gateway;
 
+import com.perfumeria.catalogo.domain.model.UserInfo;
+
 public interface UsuarioGateway {
 
-    boolean usuarioExiste(Long usuarioId);
+    UserInfo obtenerUsuario(Long usuarioId);
 }
