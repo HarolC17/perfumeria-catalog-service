@@ -30,9 +30,7 @@ public class GlobalExceptionHandler {
             TipoInvalidoException.class,
             CarritoNoEncontradoException.class,
             CarritoVacioException.class,
-            CantidadInvalidaException.class,
-            UsuarioNoEncontradoException.class,
-            StockInsuficienteException.class
+            UsuarioNoEncontradoException.class
     })
     public ResponseEntity<ResponseDTO> handleUserErrors(RuntimeException ex) {
         ResponseDTO response = new ResponseDTO(
@@ -41,6 +39,16 @@ public class GlobalExceptionHandler {
                 ex.getMessage()
         );
         return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @ExceptionHandler({StockInsuficienteException.class, CantidadInvalidaException.class})
+    public ResponseEntity<ResponseDTO> handleBadRequest(RuntimeException ex) {
+        ResponseDTO response = new ResponseDTO(
+                LocalDateTime.now(),
+                HttpStatus.BAD_REQUEST.value(),
+                ex.getMessage()
+        );
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
     // ==========================
