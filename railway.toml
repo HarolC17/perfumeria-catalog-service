@@ -1,8 +1,15 @@
 [build]
 builder = "nixpacks"
 
+[build.nixpacksPlan.phases.setup]
+nixPkgs = ["maven", "jdk17"]
+
 [build.nixpacksPlan.phases.build]
 cmds = [
     "chmod +x mvnw",
-    "./mvnw clean package -DskipTests"
+    "./mvnw --version",
+    "./mvnw clean package -DskipTests -Dmaven.test.skip=true -Dmaven.javadoc.skip=true"
 ]
+
+[build.nixpacksPlan.start]
+cmd = "java -Dserver.port=$PORT -Xmx512m -Xms256m -XX:+UseSerialGC -jar target/*.jar"
