@@ -2,4 +2,5 @@
 builder = "nixpacks"
 
 [build.nixpacksPlan.phases.build]
-cmds = ["./mvnw clean package -DskipTests"]
+cmds = ["chmod +x mvnw", "./mvnw clean package -DskipTests"]
+
