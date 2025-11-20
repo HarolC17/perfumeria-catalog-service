@@ -22,6 +22,8 @@ public class ItemCarritoData {
     private Double precioUnitario;
     private Integer cantidad;
     private Double subtotal;
+    @Column(name = "imagen_url")
+    private String imagenUrl;
 
     @ManyToOne
     @JoinColumn(name = "id_carrito")
