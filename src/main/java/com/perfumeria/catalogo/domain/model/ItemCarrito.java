@@ -17,5 +17,6 @@ public class ItemCarrito {
     private Double precioUnitario;
     private Integer cantidad;
     private Double subtotal;
+    private String imagenUrl;
 
 }

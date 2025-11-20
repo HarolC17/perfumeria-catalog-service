@@ -35,7 +35,8 @@ public class CarritoResponseMapper {
                 item.getNombreProducto(),
                 item.getPrecioUnitario(),
                 item.getCantidad(),
-                item.getSubtotal()
+                item.getSubtotal(),
+                item.getImagenUrl()
         );
     }
 }

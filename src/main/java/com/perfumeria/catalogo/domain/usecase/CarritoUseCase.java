@@ -38,6 +38,7 @@ public class CarritoUseCase {
         itemCarrito.setNombreProducto(producto.getNombre());
         itemCarrito.setPrecioUnitario(producto.getPrecio());
         itemCarrito.setSubtotal(producto.getPrecio() * itemCarrito.getCantidad());
+        itemCarrito.setImagenUrl(producto.getImagenUrl());
 
         Carrito carrito = carritoGateway.buscarPorUsuarioId(usuarioId);
         if (carrito == null) {
@@ -54,6 +55,7 @@ public class CarritoUseCase {
             ItemCarrito itemExistente = existente.get();
             itemExistente.setCantidad(itemExistente.getCantidad() + itemCarrito.getCantidad());
             itemExistente.setSubtotal(itemExistente.getPrecioUnitario() * itemExistente.getCantidad());
+            itemExistente.setImagenUrl(producto.getImagenUrl());
         } else {
             carrito.getItems().add(itemCarrito);
         }
