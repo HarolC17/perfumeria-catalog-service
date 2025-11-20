@@ -6,6 +6,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.beans.factory.annotation.Value;
+
 
 import java.util.Map;
 
@@ -15,11 +17,15 @@ public class UsuarioGatewayImpl implements UsuarioGateway {
 
     private final RestTemplate restTemplate;
 
+    // ✅ Leer URL desde variables de entorno
+    @Value("${auth.service.url}")
+    private String authServiceUrl;
+
     @Override
     public boolean usuarioExiste(Long usuarioId) {
         try {
             ResponseEntity<Map> response = restTemplate.getForEntity(
-                    "http://localhost:1010/api/perfumeria/usuario/" + usuarioId,
+                    authServiceUrl + "/api/perfumeria/usuario/" + usuarioId,  // ✅ Usar variable
                     Map.class
             );
 
@@ -39,4 +45,3 @@ public class UsuarioGatewayImpl implements UsuarioGateway {
         }
     }
 }
-
