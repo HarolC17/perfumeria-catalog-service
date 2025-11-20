@@ -15,6 +15,16 @@ import java.util.stream.Collectors;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
+    @ExceptionHandler({CarritoVacioException.class, CarritoNoEncontradoException.class})
+    public ResponseEntity<ResponseDTO> handleCarritoOk(RuntimeException ex) {
+        ResponseDTO response = new ResponseDTO(
+                LocalDateTime.now(),
+                HttpStatus.OK.value(),
+                ex.getMessage()
+        );
+        return ResponseEntity.ok(response);
+    }
+
     // =============================
     // 400 - BAD REQUEST (Validaciones)
     // =============================
@@ -27,7 +37,6 @@ public class GlobalExceptionHandler {
             PrecioInvalidoException.class,
             StockInvalidoException.class,
             TipoInvalidoException.class,
-            CarritoVacioException.class,
             CantidadInvalidaException.class,
             StockInsuficienteException.class
     })
@@ -46,7 +55,6 @@ public class GlobalExceptionHandler {
     @ExceptionHandler({
             UsuarioNoEncontradoException.class,
             ProductoNoEncontradoException.class,
-            CarritoNoEncontradoException.class,
             ProductoNuloException.class
     })
     public ResponseEntity<ResponseDTO> handleNotFound(RuntimeException ex) {
